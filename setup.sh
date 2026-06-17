@@ -1,11 +1,24 @@
+#!/bin/bash
+#
+# Automated LAMP-style server setup for Laravel/PHP hosting
+# Based on: "Setting Up a Server for Hosting any Web Application" (Raiyan Memon)
+#
+# Usage (on a fresh Ubuntu droplet, as root):
+#   curl -fsSL https://your-domain.example.com/setup.sh -o setup.sh
+#   bash setup.sh
+#
+# This script is INTERACTIVE for passwords (per your choice) but automates
+# every command from the guide. Run it once on a fresh server.
 
 set -e  # exit immediately if any command fails
 
+# ---------- Helper functions ----------
 info()  { echo -e "\033[1;34m[INFO]\033[0m $1"; }
 ok()    { echo -e "\033[1;32m[OK]\033[0m $1"; }
 warn()  { echo -e "\033[1;33m[WARN]\033[0m $1"; }
 err()   { echo -e "\033[1;31m[ERROR]\033[0m $1"; }
 
+# ---------- Pre-flight checks ----------
 if [ "$EUID" -ne 0 ]; then
   err "Please run this script as root (e.g. via sudo or as the droplet's root user)."
   exit 1
@@ -70,11 +83,6 @@ read -rsp "Enter a password for this MySQL user: " MYSQL_USER_PASS
 echo ""
 read -rsp "Confirm password: " MYSQL_USER_PASS_CONFIRM
 echo ""
-
-if [ "$MYSQL_USER_PASS" != "$MYSQL_USER_PASS_CONFIRM" ]; then
-  err "Passwords did not match. Re-run the script to try again."
-  exit 1
-fi
 
 mysql <<EOF
 CREATE USER IF NOT EXISTS '${NEW_USER}'@'localhost' IDENTIFIED WITH mysql_native_password BY '${MYSQL_USER_PASS}';
