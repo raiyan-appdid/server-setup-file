@@ -236,10 +236,10 @@ if [ -n "$CLONE_PATH" ]; then
       APP_TYPE="Laravel"
       info "Running Laravel setup in ${CLONE_PATH}..."
 
-      sudo -u "$NEW_USER" bash -c "cd '${CLONE_PATH}' && composer install --no-interaction --prefer-dist" || warn "composer install failed — check PHP/extension errors and re-run manually in ${CLONE_PATH}."
+      sudo -u "$NEW_USER" bash -c "cd '${CLONE_PATH}' && composer install --ignore-platform-reqs --no-interaction --prefer-dist" || warn "composer install failed — check PHP/extension errors and re-run manually in ${CLONE_PATH}."
 
       if [ -f "${CLONE_PATH}/.env.example" ] && [ ! -f "${CLONE_PATH}/.env" ]; then
-        sudo -u "$NEW_USER" cp "${CLONE_PATH}/.env.example" "${CLONE_PATH}/.env"
+        sudo -u "$NEW_USER" cp "${CLONE_PATH}/.env.example" "${CLONE_PAT1H}/.env"
         ok ".env created from .env.example — edit it with your DB credentials before going further."
       fi
 
